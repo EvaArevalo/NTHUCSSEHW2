@@ -1,0 +1,55 @@
+/**---------------------------------------
+Unit Test
+containsID(ID)
+case1:
+	input: 985002001
+	expected output: True
+case2:
+	input: 915002001
+	expected output: NoSuchIdExceptions
+---------------------------------------**/
+public testContainsID(ID)
+
+/**---------------------------------------
+Unit Test
+showGradeID(ID)
+case1:
+	input: 962001051
+	expected output: 81 32 50 90 93 91
+case2:
+	input: 915002001
+	expected output: NoSuchIdExceptions // raised from within containsID
+---------------------------------------**/
+public testShowGradeID(ID)
+
+
+/**---------------------------------------
+Unit Test
+showRankID(ID)
+Applied Parameters: weights=(0.2,0.2,0.2,0.2,0.2)
+case1:
+	input: 962001051
+	expected output: 63
+case2:
+	input: 915002001
+	expected output: NoSuchIdExceptions// raised from within containsID
+---------------------------------------**/
+public testShowRank(ID)
+
+
+/**---------------------------------------
+Unit Test
+testCalculateTotalGrade(weights) 
+Applied parameters: Student 962001051 with Grades: 81 32 50 90 93 91
+case1:
+	input: (0.1,0.1,0.1,0.3,0.4) //weights
+	expected output: (81*0.1+32*0.1+50*0.1+90*0.3+93*0.4=80.5四捨五入81)
+case2:
+	input: (0.2,0.2,0.2,0.2,0.2)
+	expected output:(81*0.2+32*0.2+50*0.2+90*0.2+93*0.2=69.2四捨五入69)
+case 3:	
+	input:"Q"
+	expected output: 
+---------------------------------------**/
+public testUpdateWeights(weights)
+
