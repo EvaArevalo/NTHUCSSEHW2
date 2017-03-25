@@ -62,6 +62,9 @@ public class Grades {
 		return this.ID;
 	}
 	
+	public String getName(){
+		return this.name;
+	}
 	
 	public int[] getScores(){
 		/**

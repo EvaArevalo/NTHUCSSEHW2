@@ -96,4 +96,16 @@ public class GradeSystems {
 		this.weights = weights;
 	}
 
+	public String getName(int ID){
+		
+		Iterator<Grades> it = aList.iterator();
+		
+		while(it.hasNext()){
+			if (it.next().getID() == ID)
+				return it.next().getName();
+		}
+		
+		//if ID not found, which shouldn't happen
+		return "";
+	}
 }
