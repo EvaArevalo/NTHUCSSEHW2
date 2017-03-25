@@ -15,7 +15,7 @@ public class UI {
 	/**
 	 * constructor UI
 	 * 
-	 * Construct UI.
+	 * 
 	 * 
 	 * @exception NoSuchIDExceptions, NoSuchCommandExceptions
 	 */
