@@ -1,5 +1,7 @@
 package gradesystem;
 
+import java.io.IOException;
+
 public class Main {
 
 	/**
@@ -10,10 +12,7 @@ public class Main {
 	 * @param args
 	 * @exception NoSuchIDExceptions, NoSuchCommandExceptions
 	 */
-	public static void main(String[] args) {
-		//try { UI() aUI }
-
-	}
-	
-	
+	public static void main(String[] args)  throws IOException {
+		new UI();
+	}	
 }
