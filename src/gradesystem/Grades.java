@@ -11,12 +11,19 @@ public class Grades {
 	 * 
 	 **/
 	
-	public enum ExamsName{
-		lab1, lab2, lab3, midTerm, finalExam, totalGrade
+	public enum ExamsName {
+		lab1(0), lab2(1), lab3(2), midTerm(3), finalExam(4), totalGrade(5);
+		private int code;
+		private ExamsName(int code) {
+			this.code = code;
+		}
+		public int getCode(){
+			return this.code;
+		}
 	}
 	
 	int ID;
-	int[] exams;
+	int[] exams = new int[6];
 	String name;
 	
 	public Grades(String name, int ID, int lab1, int lab2, 
@@ -31,12 +38,12 @@ public class Grades {
 		
 		this.ID = ID;
 		this.name = name;
-		exams[ExamsName.lab1.ordinal()] = lab1;
-		exams[ExamsName.lab2.ordinal()] = lab2;
-		exams[ExamsName.lab3.ordinal()] = lab3;
-		exams[ExamsName.midTerm.ordinal()] = midTerm;
-		exams[ExamsName.finalExam.ordinal()] = finalExam;
-		exams[ExamsName.totalGrade.ordinal()] = calculateTotalGrade(weights);
+		exams[ExamsName.lab1.getCode()] = lab1;
+		exams[ExamsName.lab2.getCode()] = lab2;
+		exams[ExamsName.lab3.getCode()] = lab3;
+		exams[ExamsName.midTerm.getCode()] = midTerm;
+		exams[ExamsName.finalExam.getCode()] = finalExam;
+		exams[ExamsName.totalGrade.getCode()] = calculateTotalGrade(weights);
 		
 	}
 	
@@ -46,7 +53,6 @@ public class Grades {
 		 * grades in the attributes for the ID. The weighted average is 
 		 * rounded to the closest integer.
 		 **/
-		
 		float total = 0;
 		
 		for (int i=0; i<5; i++)
@@ -78,6 +84,10 @@ public class Grades {
 		 * Getter method for the totalGrade score, last entry of exams array.
 		 **/
 		return this.exams[5];
+	}
+	
+	public void resetTotalGrade(float[] weights) {
+		this.exams[5] = calculateTotalGrade(weights);
 	}
 	
 }

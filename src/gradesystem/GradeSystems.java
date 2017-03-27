@@ -4,6 +4,8 @@ import java.util.*;
 import gradesystem.Grades.ExamsName;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
 
 public class GradeSystems {
 	
@@ -11,34 +13,34 @@ public class GradeSystems {
 	LinkedList<Grades> aList = new LinkedList<Grades>();
 	Grades classAvg;
 	
-	GradeSystems(){
+	GradeSystems() throws IOException {
 		
 		weights = new float[]{0.1f,0.1f,0.1f,0.3f,0.4f};
+		Path path = FileSystems.getDefault().getPath(".", "gradeinput.txt");
+	    BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8);
+		String line = br.readLine();
 		
-		try {
-			BufferedReader br = new BufferedReader(new FileReader("gradeinput.txt"));
-			String line = br.readLine();
+		while (line != null) {
+			String[] IdInfo = line.split(" ");
 			
-			while (line != null) {
-				String[] IdInfo = line.split(" ");
-				
-				Grades aGrade = buildGrade(IdInfo);				
-				orderedInsert(aGrade);
-				
-				line = br.readLine();
-			}
-			classAvg = calculateClassAvg();
+			Grades aGrade = buildGrade(IdInfo);
+			orderedInsert(aGrade);
 			
-			br.close();
-		} catch(IOException e){}
+			line = br.readLine();
+		}
+		classAvg = calculateClassAvg();
+		
+		br.close();
 	}
 	
 	public boolean containsID(int ID){
 		
 		Iterator<Grades> it = aList.iterator();
+		Grades g;
 		
 		while(it.hasNext()){
-			if (it.next().getID() == ID)
+			g = it.next();
+			if (g.getID() == ID)
 				return true;
 		}
 		
@@ -48,10 +50,12 @@ public class GradeSystems {
 	public int[] showGrade(int ID){
 		
 		Iterator<Grades> it = aList.iterator();
+		Grades g;
 		
 		while(it.hasNext()){
-			if (it.next().getID() == ID)
-				return it.next().getScores();
+			g = it.next();
+			if (g.getID() == ID)
+				return g.getScores();
 		}
 		
 		//if ID not found, which shouldn't happen
@@ -82,15 +86,28 @@ public class GradeSystems {
 	public void updateWeights(float[] weights) {
 		//suppose we receive list with 5 elements
 		this.weights = weights;
+
+		List<Grades> tmp = new ArrayList<Grades>();
+		for (Grades g : aList) {
+			g.resetTotalGrade(weights);
+			tmp.add(g);
+		}
+		
+		aList.clear();
+		for (Grades g : tmp) {
+			orderedInsert(g);
+		}
 	}
 
 	public String getName(int ID) {
 		
 		Iterator<Grades> it = aList.iterator();
+		Grades g;
 		
-		while(it.hasNext()){
-			if (it.next().getID() == ID)
-				return it.next().getName();
+		while(it.hasNext()) {
+			g = it.next();
+			if (g.getID() == ID)
+				return g.getName();
 		}
 		
 		//if ID not found, which shouldn't happen
@@ -114,7 +131,8 @@ public class GradeSystems {
 		int index = 0;
 		Grades element;
 		
-		while((element = aList.get(index)) != null) {
+		while(index < aList.size()) {
+			element = aList.get(index);
 			if (insertedGrade.getTotalGrade() > element.getTotalGrade()) {
 				aList.add(index, insertedGrade);
 				break;
@@ -128,16 +146,19 @@ public class GradeSystems {
 	private Grades calculateClassAvg() {
 		
 		Iterator<Grades> it = aList.iterator();
-		int lab1 = 0, lab2 = 0, lab3 = 0, midTerm = 0, finalExam = 0;
+		Grades g;
+		int lab1 = 0, lab2 = 0, lab3 = 0, midTerm = 0, finalExam = 0, num = aList.size();
 		
 		while(it.hasNext()) {
-			int[] scores = it.next().getScores();
-			lab1 	+= scores[ExamsName.lab1.ordinal()];
-			lab2 	+= scores[ExamsName.lab2.ordinal()];
-			lab3 	+= scores[ExamsName.lab3.ordinal()];
-			midTerm += scores[ExamsName.midTerm.ordinal()];
-			finalExam += scores[ExamsName.finalExam.ordinal()];
-		}		
-		return new Grades("class",0,lab1,lab2,lab3,midTerm,finalExam,weights);
+			g = it.next();
+			int[] scores = g.getScores();
+			lab1 	+= scores[ExamsName.lab1.getCode()];
+			lab2 	+= scores[ExamsName.lab2.getCode()];
+			lab3 	+= scores[ExamsName.lab3.getCode()];
+			midTerm += scores[ExamsName.midTerm.getCode()];
+			finalExam += scores[ExamsName.finalExam.getCode()];
+		}
+		
+		return new Grades("class",0,lab1/num,lab2/num,lab3/num,midTerm/num,finalExam/num,weights);
 	}
 }

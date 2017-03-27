@@ -69,13 +69,13 @@ public class UI {
 		System.out.println("\t(A)verage");
 		System.out.println("\t(W)eights Update");
 		System.out.println("\t(E)xit:");
-		String line = System.console().readLine();
+		String line = keyReader.readLine();
 		switch (line) {
 		case "G": // show grades of the user
 			int[] scores = aGradeSystem.showGrade(userID);
 			System.out.println("Grades for " + userName + ":");
 			for (ExamsName e : ExamsName.values())
-				System.out.println("\t" + e.toString() + scores[e.ordinal()]);
+				System.out.println("\t" + e.toString() + ": " + scores[e.getCode()]);
 			break;
 		case "R": // show rank of the user
 			int rank = aGradeSystem.showRank(userID);
@@ -85,19 +85,26 @@ public class UI {
 			int[] classAvgScore = aGradeSystem.showAvg();
 			System.out.println("Average grades for the class:");
 			for (ExamsName e : ExamsName.values())
-				System.out.println("\t" + e.toString() + classAvgScore[e.ordinal()]);
+				System.out.println("\t" + e.toString() + ": " + classAvgScore[e.getCode()]);
 			break;
 		case "W": // update weights
 			System.out.println("Current weights for each grade:");
 			for (ExamsName e : ExamsName.values())
-				System.out.println("\t" + e.toString() + aGradeSystem.weights[e.ordinal()]*100 + "%");
+				if (!e.toString().equals("totalGrade")) // totalGrade does't have weight
+					System.out.println("\t" + e.toString() + ": " + (int)(aGradeSystem.weights[e.getCode()]*100) + "%");
 			System.out.println("Enter new weights (in percentage):");
 			float[] newWeights = new float[5];
-			for (ExamsName e : ExamsName.values()) {
-				System.out.print(e.toString() + ": ");
-				newWeights[e.ordinal()] = (float) (Integer.parseInt(System.console().readLine())) / 100;
-			}
-			aGradeSystem.updateWeights(newWeights);
+			for (ExamsName e : ExamsName.values())
+				if (!e.toString().equals("totalGrade")) {
+					System.out.print(e.toString() + ": ");
+					newWeights[e.getCode()] = (float) (Integer.parseInt(keyReader.readLine())) / 100;
+				}
+			System.out.println("Comfirm the new weights:");
+			for (ExamsName e : ExamsName.values())
+				if (!e.toString().equals("totalGrade")) // totalGrade does't have weight
+					System.out.println("\t" + e.toString() + ": " + (int)(newWeights[e.getCode()]*100) + "%");
+			System.out.print("Save? (Y/N): ");
+			if (keyReader.readLine().equals("Y")) aGradeSystem.updateWeights(newWeights);
 			break;
 		case "E":
 			return false;
