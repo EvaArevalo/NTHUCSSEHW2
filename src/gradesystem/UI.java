@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import gradesystem.Grades.ExamsName;
+import gradesystem.GradeSystems.ExamsName;
 
 /**
  * class UI

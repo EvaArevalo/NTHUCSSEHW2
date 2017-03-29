@@ -1,37 +1,63 @@
 package gradesystem;
 import java.util.*;
 
-import gradesystem.Grades.ExamsName;
-
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 
 public class GradeSystems {
 	
+	/**
+	 * CLASS PURPOSE: The GradeSystems defines a System that keeps records for each students of their grades and their final scores,
+	 * 				  as well as keeping the average score for the entire class.
+	 * 
+	 * DATA STRUCTURES: We used a linked list of instances of the Grades class, one per student. 
+	 */
+	public static final int EXAMS_NUMBER = 5;
+	public enum ExamsName {
+		lab1(0), lab2(1), lab3(2), midTerm(3), finalExam(4), totalGrade(5);
+		private int code;
+		private ExamsName(int code) {
+			this.code = code;
+		}
+		public int getCode(){
+			return this.code;
+		}
+	}
 	float[] weights;
 	LinkedList<Grades> aList = new LinkedList<Grades>();
 	Grades classAvg;
+
 	
+	/**
+	 * TIME COMPLEXITY: O(n^2) worst case
+	 * PURPOSE: Class constructor. Builds the Grades Systems by:
+	 * 			[1] Reading grades from input file "gradeinput.txt"
+	 * 			[2] Creating a Grades instance for each student/ID  .
+	 * 			[3] Calculates the class Average.
+	 * NOTE:	Supports UTF-8 Characters.
+	 * 
+	 * @throws IOException
+	 */
 	GradeSystems() throws IOException {
 		
+		//Default values for weights
 		weights = new float[]{0.1f,0.1f,0.1f,0.3f,0.4f};
+		
 		Path path = FileSystems.getDefault().getPath(".", "gradeinput.txt");
 	    BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8);
 		String line = br.readLine();
 		
 		while (line != null) {
-			String[] IdInfo = line.split(" ");
-			
-			Grades aGrade = buildGrade(IdInfo);
+			Grades aGrade = buildGrade(line);
 			orderedInsert(aGrade);
-			
 			line = br.readLine();
 		}
-		classAvg = calculateClassAvg();
 		
+		classAvg = calculateClassAvg();
 		br.close();
 	}
+	
 	
 	public boolean containsID(int ID){
 		
@@ -63,21 +89,65 @@ public class GradeSystems {
 		
 	}
 	
+	
+	/**
+	 * TIME COMPLEXITY: O(n) worst case
+	 * PURPOSE:	Gets the rank of a student in the Grade System.
+	 * 
+	 * @param ID	 int ID of the student whose rank we want
+	 * @return rank	 Shows the rank of the student, if other students have same final grade, all of them share same rank
+	 */
 	public int showRank(int ID){
 	
 		int index = 0;
 		Grades element;
+		int IDscore = 0;
 		
 		while((element = aList.get(index)) != null) {
 			if (element.getID() == ID) {
-				return index + 1;
+				IDscore = element.getTotalGrade();
+				break;
 			}
 			index++;
 		}
 		
-		//if ID not found, which shouldn't happen
+		//Check if students with same grade
+		if(index == 0) 
+			return 1;
+
+		element = aList.get(--index);
+		
+		while(element.getTotalGrade()==IDscore)
+			if(index > 0)
+				element = aList.get(--index);
+			else
+				return 1;
+
+		return index+2;
+		
+		
+/*		//if ID not found, which shouldn't happen
 		return 0;
+		
+		
+		
+		int index = 0;
+		Grades element;
+		int thisStudentTotalGrade = getTotalGrade(ID);
+		
+		while((element = aList.get(index)) != null) {
+			if (element.getTotalGrade() >= thisStudentTotalGrade) {
+				count++;
+			}
+			
+		}
+		
+		
+		//if ID not found, which shouldn't happen
+		return count+1;*/
 	}
+	
+	
 	
 	public int[] showAvg() {
 		return classAvg.getScores();
@@ -114,19 +184,36 @@ public class GradeSystems {
 		return "";
 	}
 	
-	private Grades buildGrade(String[] IdInfo) {
+	
+	/**
+	 * TIME COMPLEXITY: O(1)
+	 * PURPOSE: Parses the line read from input file into a Grades instance for the ID.
+	 * 
+	 * @param	IdInfo	String[6] an array of ID, name, and 5 grades.
+	 * @returns Grades	new Grades instance for the ID
+	 */
+	private Grades buildGrade(String line) {
+		
+		String[] IdInfo = line.split(" ");
+		int[] scores = new int[EXAMS_NUMBER];
 		
 		int ID = Integer.parseInt(IdInfo[0]);
 		String name = IdInfo[1];
-		int lab1 = Integer.parseInt(IdInfo[2]);
-		int lab2 = Integer.parseInt(IdInfo[3]);
-		int lab3 = Integer.parseInt(IdInfo[4]);
-		int midTerm = Integer.parseInt(IdInfo[5]);
-		int finalExam = Integer.parseInt(IdInfo[6]);
+		scores[0] = Integer.parseInt(IdInfo[2]);
+		scores[1] = Integer.parseInt(IdInfo[3]);
+		scores[2] = Integer.parseInt(IdInfo[4]);
+		scores[3] = Integer.parseInt(IdInfo[5]);
+		scores[4] = Integer.parseInt(IdInfo[6]);
 		
-		return new Grades(name,ID,lab1,lab2,lab3,midTerm,finalExam,weights);
+		return new Grades(name,ID,scores,weights);
 	}
 	
+	/**
+	 * TIME COMPLEXITY: O(n) worst case
+	 * PURPOSE: Inserts a Grade instance into the Linked List aList in ascending order. 
+	 * 
+	 * @param Grades	The instance we want to insert into aList
+	 */
 	private void orderedInsert(Grades insertedGrade) {
 		int index = 0;
 		Grades element;
@@ -147,18 +234,22 @@ public class GradeSystems {
 		
 		Iterator<Grades> it = aList.iterator();
 		Grades g;
-		int lab1 = 0, lab2 = 0, lab3 = 0, midTerm = 0, finalExam = 0, num = aList.size();
+		int[] totalScores = new int[EXAMS_NUMBER];
+		float[] avgscores = new float[EXAMS_NUMBER];
 		
 		while(it.hasNext()) {
 			g = it.next();
 			int[] scores = g.getScores();
-			lab1 	+= scores[ExamsName.lab1.getCode()];
-			lab2 	+= scores[ExamsName.lab2.getCode()];
-			lab3 	+= scores[ExamsName.lab3.getCode()];
-			midTerm += scores[ExamsName.midTerm.getCode()];
-			finalExam += scores[ExamsName.finalExam.getCode()];
+			for (int i=0; i<EXAMS_NUMBER; i++){
+				totalScores[i] += scores[i];
+			}
 		}
 		
-		return new Grades("class",0,lab1/num,lab2/num,lab3/num,midTerm/num,finalExam/num,weights);
+		for (int i=0; i<EXAMS_NUMBER; i++){
+			avgscores[i] = (float) (totalScores[i]) / aList.size();
+			totalScores[i] = Math.round(avgscores[i]);
+		}
+		
+		return new Grades("class",0,totalScores,weights);
 	}
 }

@@ -2,9 +2,8 @@ package gradesystem;
 
 @SuppressWarnings("serial")
 /**
- * NoSuchIDExceptions
- * 
- * When user enter an ID that is not in the system.
+ * PURPOSE: Defines NoSuchIDExceptions, inherits from exceptions and is triggered when an ID that is not inside the GradeSystem is
+ * 			input by user.
  */
 public class NoSuchIDExceptions extends Exception {
 	@Override
