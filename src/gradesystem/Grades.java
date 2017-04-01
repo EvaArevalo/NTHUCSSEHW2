@@ -1,13 +1,12 @@
 package gradesystem;
 
+/**
+ * CLASS PURPOSE: Grades class stores the information for each tuple of the database for the Grading System.
+ * 				  Its attributes are ID, name and the grades for each one of the five exams:lab1, lab2, lab3, 
+ * 				  midTerm, finalExam, and totalGrade.
+ * 
+ **/
 public class Grades {
-	
-	/**
-	 * CLASS PURPOSE: Grades class stores the information for each tuple of the database for the Grading System.
-	 * 				  Its attributes are ID, name and the grades for each one of the five exams:lab1, lab2, lab3, 
-	 * 				  midTerm, finalExam, and totalGrade.
-	 * 
-	 **/
 	
 	public static final int EXAMS_NUMBER = 5;
 	

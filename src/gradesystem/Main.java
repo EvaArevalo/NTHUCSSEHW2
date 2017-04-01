@@ -5,9 +5,8 @@ import java.io.IOException;
 public class Main {
 
 	/**
-	 * method main
-	 * 
-	 * Construct aUI.
+	 * TIME COMPLEXITY: N/A (main)
+	 * PURPOSE:	Initializes the system by creating a new UI() instance.
 	 * 
 	 * @param args
 	 * @exception NoSuchIDExceptions, NoSuchCommandExceptions

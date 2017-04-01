@@ -5,14 +5,14 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 
+/**
+ * CLASS PURPOSE: The GradeSystems defines a System that keeps records for each students of their grades and their final scores,
+ * 				  as well as keeping the average score for the entire class.
+ * 
+ * DATA STRUCTURES: We used a linked list of instances of the Grades class, one per student. 
+ */
 public class GradeSystems {
 	
-	/**
-	 * CLASS PURPOSE: The GradeSystems defines a System that keeps records for each students of their grades and their final scores,
-	 * 				  as well as keeping the average score for the entire class.
-	 * 
-	 * DATA STRUCTURES: We used a linked list of instances of the Grades class, one per student. 
-	 */
 	public static final int EXAMS_NUMBER = 5;
 	public enum ExamsName {
 		lab1(0), lab2(1), lab3(2), midTerm(3), finalExam(4), totalGrade(5);
@@ -28,7 +28,6 @@ public class GradeSystems {
 	LinkedList<Grades> aList = new LinkedList<Grades>();
 	Grades classAvg;
 
-	
 	/**
 	 * TIME COMPLEXITY: O(n^2) worst case
 	 * PURPOSE: Class constructor. Builds the Grades Systems by:
@@ -58,7 +57,14 @@ public class GradeSystems {
 		br.close();
 	}
 	
-	
+	/**
+	 * TIME COMPLEXITY: O(n) worst case
+	 * PURPOSE:	Checks whether an ID is in the GradeSystem. Iterates linearly
+	 * 			through the aListand checks their ID.
+	 * 
+	 * @param  ID			int 	 ID of the student
+	 * @return True/False	boolean	 true if the ID is in sList, false otherwise
+	 */
 	public boolean containsID(int ID){
 		
 		Iterator<Grades> it = aList.iterator();
@@ -73,6 +79,14 @@ public class GradeSystems {
 		return false;
 	}
 	
+	/**
+	 * TIME COMPLEXITY: O(n) worst case
+	 * PURPOSE:	Gets the scores for each one of the 5 exams and the final grade
+	 * 			of the student identified with the ID.
+	 * 
+	 * @param   ID				 int    ID of the student whose grade we want
+	 * @return  g.getScores()	 int[5]	Array of scores for ID
+	 */
 	public int[] showGrade(int ID){
 		
 		Iterator<Grades> it = aList.iterator();
@@ -89,13 +103,12 @@ public class GradeSystems {
 		
 	}
 	
-	
 	/**
 	 * TIME COMPLEXITY: O(n) worst case
 	 * PURPOSE:	Gets the rank of a student in the Grade System.
 	 * 
-	 * @param ID	 int ID of the student whose rank we want
-	 * @return rank	 Shows the rank of the student, if other students have same final grade, all of them share same rank
+	 * @param  ID	 int  ID of the student whose rank we want
+	 * @return rank	 int  Shows the rank of the student, if other students have same final grade, all of them share same rank
 	 */
 	public int showRank(int ID){
 	
@@ -125,34 +138,27 @@ public class GradeSystems {
 
 		return index+2;
 		
-		
-/*		//if ID not found, which shouldn't happen
-		return 0;
-		
-		
-		
-		int index = 0;
-		Grades element;
-		int thisStudentTotalGrade = getTotalGrade(ID);
-		
-		while((element = aList.get(index)) != null) {
-			if (element.getTotalGrade() >= thisStudentTotalGrade) {
-				count++;
-			}
-			
-		}
-		
-		
-		//if ID not found, which shouldn't happen
-		return count+1;*/
 	}
 	
-	
-	
+	/**
+	 * TIME COMPLEXITY: O(1) 
+	 * PURPOSE:	Gets the array of 6 average grades for the students in the system
+	 * 			for each exam ant for the final grade.
+	 * 
+	 * @return classAvg.getScores() int[5] Representing the grades for each exam
+	 */
 	public int[] showAvg() {
 		return classAvg.getScores();
 	}
 	
+	/**
+	 * TIME COMPLEXITY: O(n^2) 
+	 * PURPOSE: Recalculates all grades for students based on new weights. 
+	 * 			Iterates through the aList of Grade instances and calls the 
+	 * 			resetTotalGrade(weights) for each of them.
+	 * 
+	 * @param  weights 		float[5]  Representing the grades for each exam
+	 */
 	public void updateWeights(float[] weights) {
 		//suppose we receive list with 5 elements
 		this.weights = weights;
@@ -169,6 +175,13 @@ public class GradeSystems {
 		}
 	}
 
+	/**
+	 * TIME COMPLEXITY: O(1) 
+	 * PURPOSE: Gets the name of a student ID in the system.
+	 * 
+	 * @param  ID			Int		ID of the student 
+	 * @return ID.getName()	String	The string corresponding to the ID's name
+	 */
 	public String getName(int ID) {
 		
 		Iterator<Grades> it = aList.iterator();
@@ -184,13 +197,12 @@ public class GradeSystems {
 		return "";
 	}
 	
-	
 	/**
 	 * TIME COMPLEXITY: O(1)
 	 * PURPOSE: Parses the line read from input file into a Grades instance for the ID.
 	 * 
-	 * @param	IdInfo	String[6] an array of ID, name, and 5 grades.
-	 * @returns Grades	new Grades instance for the ID
+	 * @param	IdInfo	String[6]   An array of ID, name, and 5 grades.
+	 * @returns Grades	new Grades  Instance for the ID
 	 */
 	private Grades buildGrade(String line) {
 		
@@ -212,7 +224,7 @@ public class GradeSystems {
 	 * TIME COMPLEXITY: O(n) worst case
 	 * PURPOSE: Inserts a Grade instance into the Linked List aList in ascending order. 
 	 * 
-	 * @param Grades	The instance we want to insert into aList
+	 * @param insertedGrade	 Grades	 The instance we want to insert into aList
 	 */
 	private void orderedInsert(Grades insertedGrade) {
 		int index = 0;
@@ -230,6 +242,15 @@ public class GradeSystems {
 			aList.add(index, insertedGrade);
 	}
 	
+	/**
+	 * TIME COMPLEXITY: O(n)
+	 * PURPOSE: Calculates the average of all students in the system for each of the 5 
+	 * 			exams and for the final grade. Iterates linearly through the aList.
+	 * 
+	 * @return new Grades instance	  Grades  A new instance of grades representing the
+	 * 									 	  averaged grades of all students in the system,
+	 * 									 	  with 0 as ID and "class" as name.
+	 */
 	private Grades calculateClassAvg() {
 		
 		Iterator<Grades> it = aList.iterator();

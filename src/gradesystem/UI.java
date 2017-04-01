@@ -7,35 +7,37 @@ import java.io.InputStreamReader;
 import gradesystem.GradeSystems.ExamsName;
 
 /**
- * class UI
+ * CLASS PURPOSE: UI class handles user input and calls the appropriate methods from the GradeSystem class
+ * 				  according to the commands input by the user.
  * 
- * UI()
- * checkId(id)
- * promptCommand()
- * promptId()
- * showFinishMsg()
- * showWelcomeMsg()
- *
- */
+ **/
 public class UI {
 
-	/**
-	 * constructor UI
-	 * 
-	 * @exception NoSuchIDExceptions, NoSuchCommandExceptions
-	 */
 	BufferedReader keyReader = new BufferedReader(new InputStreamReader(
 			System.in));
 	
 	GradeSystems aGradeSystem;
 	int userID;
 	String userName;
-
+	
+	/**
+	 * TIME COMPLEXITY: N/A (UI)
+	 * PURPOSE:	Class Constructor. Runs the runPromptID() function.
+	 * 
+	 * @exception IOException
+	 */
 	public UI() throws IOException {
 		aGradeSystem = new GradeSystems();
 		runPromptID();
 	}
 	
+	/**
+	 * TIME COMPLEXITY: N/A (UI)
+	 * PURPOSE:	Wrapper function for the promptID() function. Prompts the user to enter ID
+	 * 			and handles user input in this state of the system of waiting for ID to query.
+	 * 
+	 * @exception IOException
+	 */
 	public void runPromptID() throws IOException {
 		try {
 			while(promptID()) {
@@ -47,6 +49,14 @@ public class UI {
 		}
 	}
 	
+	/**
+	 * TIME COMPLEXITY: N/A (UI)
+	 * PURPOSE:	Wrapper function for the promptCommand() function. Prompts the user to enter 
+	 * 			a command after entering an ID and handles user input in this state of the system 
+	 * 			of querying a student ID.
+	 * 
+	 * @exception IOException
+	 */
 	public void runPromptCommand() throws IOException {
 		try {
 			while(promptCommand()) {
@@ -58,10 +68,46 @@ public class UI {
 		} 	
 	}
 	
+	/**
+	 * TIME COMPLEXITY: O(1)
+	 * PURPOSE:	Checks whether an ID is in the GradeSystem. Calls the containsID from the
+	 * 			aGradeSystem GradeSystem instance.
+	 * 
+	 * @return True/False	boolean	 true if the ID is in sList, false otherwise
+	 */
 	public boolean checkID(int ID) {
 		return aGradeSystem.containsID(ID);
 	}
 	
+	/**
+	 * TIME COMPLEXITY: N/A (UI)
+	 * PURPOSE:	Function for prompting user to input a command after inputing an ID and 
+	 * 			handling user input during this stage of querying ID. Does the following:
+	 * 			[1] Prints the list of possible commands.
+	 * 			[2] Decodes the commands, by user input:
+	 * 				["G"] Handles the Grade command, prints the grades for each of the 5 
+	 * 					  exams and the final grade of the student. Calls the showGrade(ID)
+	 * 					  method from the GradeSystem class. 
+	 * 				["R"] Handles the Rank command, prints the rank of the student in the 
+	 * 					  GradeSystem. Calls the showRank(ID) method from the GradeSystem
+	 * 					  GradeSystem class.
+	 * 				["A"] Handles the Average command, prints the average for the scores of 
+	 *					  all students for each one of the 5 exams and the total average 
+	 *					  score. Calls the showAvg() method from the GradeSystem class.
+	 * 				["W"] Handles the Weights command.Does the following:
+	 * 					  [a] Prints the list of the weights currently in the system for
+	 * 						  each exam.
+	 * 					  [b] Prompts user to input a new weight for each exam
+	 * 					  [c] Prompts the user to reenter the new weights for each exam
+	 * 					  [d] Prompts the user to confirm or deny the change ("Y" or "N")
+	 * 					  [e] Changes the weights in the GradeSystem by calling the 
+	 * 						  method updateWeights() with the new weights list as arguments
+	 * 				["E"] Handles the Exit command. Exits the ID querying state and returns
+	 * 					  to the Waiting input for ID to query state.
+	 * 				["DEFAULT"] Any other command, throw a NoSuchCommandException
+	 * 
+	 * @exception NoSuchCommandExceptions, IOException
+	 */
 	public boolean promptCommand() throws NoSuchCommandExceptions, IOException  {
 		System.out.println("Enter Command");
 		System.out.println("\t(G)rade");
@@ -114,6 +160,21 @@ public class UI {
 		return true;
 	}
 	
+	
+	/**
+	 * TIME COMPLEXITY: N/A (UI)
+	 * PURPOSE:	Function for prompting user to input an ID and handling user input during this
+	 * 			state of the system of waiting for ID to query. Does the following:
+	 * 			[1] Prints the message "Enter your ID or 'Q' to quit:"
+	 * 			[2] If the line is the letter "Q", it quits the system by calling the 
+	 * 				showWelcomeMessage() function
+	 * 			[3] Otherwise we check if the line is a valid line, if not, we throw a
+	 * 				NoSuchIDException
+	 * 			[4] If the ID is valid, we show the welcome message by calling the 
+	 * 				showWelcomeMsg(ID) message
+	 * 
+	 * @exception NoSuchIDExceptions, IOException
+	 */
 	public boolean promptID() throws NoSuchIDExceptions, IOException {
 		System.out.println("Enter your ID or 'Q' to quit:");
 		String line = keyReader.readLine();
@@ -132,10 +193,21 @@ public class UI {
 		}
 	}
 	
+	/**
+	 * TIME COMPLEXITY: O(1)
+	 * PURPOSE:	Prints the goodbye message "Goodbye".
+	 */
 	public void showFinishMsg() {
 		System.out.println("Goodbye!");
 	}
 	
+	/**
+	 * TIME COMPLEXITY: O(1)
+	 * PURPOSE:	Gets the name of the user identified with the most recently inputed ID
+	 * 			and outputs the "Welcome username!" message.
+	 * 
+	 * @param  ID		int 	 ID of the student whose records we want to query
+	 */
 	public void showWelcomeMsg(int ID) {
 		userName = aGradeSystem.getName(ID);
 		System.out.println("Welcome " + userName + " !");
