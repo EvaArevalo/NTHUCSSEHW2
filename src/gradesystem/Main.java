@@ -9,7 +9,7 @@ public class Main {
 	 * PURPOSE:	Initializes the system by creating a new UI() instance.
 	 * 
 	 * @param args
-	 * @exception NoSuchIDExceptions, NoSuchCommandExceptions
+	 * @exception IOException
 	 */
 	public static void main(String[] args)  throws IOException {
 		new UI();
