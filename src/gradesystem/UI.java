@@ -98,7 +98,7 @@ public class UI {
 	 * 					  [a] Prints the list of the weights currently in the system for
 	 * 						  each exam.
 	 * 					  [b] Prompts user to input a new weight for each exam
-	 * 					  [c] Prompts the user to reenter the new weights for each exam
+	 * 					  [c] Prints the list of the new weights input by user
 	 * 					  [d] Prompts the user to confirm or deny the change ("Y" or "N")
 	 * 					  [e] Changes the weights in the GradeSystem by calling the 
 	 * 						  method updateWeights() with the new weights list as arguments
@@ -121,7 +121,10 @@ public class UI {
 			int[] scores = aGradeSystem.showGrade(userID);
 			System.out.println("Grades for " + userName + ":");
 			for (ExamsName e : ExamsName.values())
-				System.out.println("\t" + e.toString() + ": " + scores[e.getCode()]);
+				if (scores[e.getCode()]<60)
+					System.out.println("\t" + e.toString() + ": " + scores[e.getCode()] +" (!)");
+				else
+					System.out.println("\t" + e.toString() + ": " + scores[e.getCode()]);
 			break;
 		case "R": // show rank of the user
 			int rank = aGradeSystem.showRank(userID);
