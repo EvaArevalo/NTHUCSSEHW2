@@ -163,7 +163,6 @@ public class UI {
 		return true;
 	}
 	
-	
 	/**
 	 * TIME COMPLEXITY: N/A (UI)
 	 * PURPOSE:	Function for prompting user to input an ID and handling user input during this
