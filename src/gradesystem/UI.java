@@ -90,7 +90,7 @@ public class UI {
 	 * 					  method from the GradeSystem class. 
 	 * 				["R"] Handles the Rank command, prints the rank of the student in the 
 	 * 					  GradeSystem. Calls the showRank(ID) method from the GradeSystem
-	 * 					  GradeSystem class.
+	 * 					  class.
 	 * 				["A"] Handles the Average command, prints the average for the scores of 
 	 *					  all students for each one of the 5 exams and the total average 
 	 *					  score. Calls the showAvg() method from the GradeSystem class.
