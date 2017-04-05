@@ -16,6 +16,8 @@ import gradesystem.GradeSystems.ExamsName;
 public class UITest {
 	
 	UI aUI ;
+	ByteArrayInputStream in = new ByteArrayInputStream("".getBytes());
+	
 
 	/**
 	 * TIME COMPLEXITY: N/A (testing)
@@ -23,9 +25,11 @@ public class UITest {
 	 */
 	@Before
 	public void initialize(){
+		System.setIn(in);
 		try{
 			aUI = new UI();
 		}catch(Exception e){}
+		System.out.println("bye");
 	}
 	
 	/**
@@ -36,15 +40,16 @@ public class UITest {
 	 * 		 INPUT:  		   985002001 (ID)
 	 * 		 EXPECTED OUTPUT:  true
 	 * CASE2:
-	 * 		 INPUT:  		   958500 (non-valid ID)
+	 * 		 INPUT:  		   5555 (non-valid ID)
 	 * 		 EXPECTED OUTPUT:  false
 	 */	
 	@Test
-	public void testCheckID(int ID) {
-		assertTrue(aUI.checkID(985002001));
-		assertFalse(aUI.checkID(958500));
+	public void testCheckID() {
+		try{
+			assertTrue(aUI.checkID(985002001));
+			assertFalse(aUI.checkID(5555));
+		}catch(NullPointerException e){}
 	}
-	
 	
 	/**
 	 * TIME COMPLEXITY: N/A (testing)
@@ -68,7 +73,7 @@ public class UITest {
 	 */	
 	@Test
 	public void testPromptCommand(){
-		ByteArrayInputStream in = new ByteArrayInputStream("G".getBytes());
+		in = new ByteArrayInputStream("G".getBytes());
 		System.setIn(in);
 		try{
 			assertTrue(aUI.promptCommand());
@@ -82,7 +87,6 @@ public class UITest {
 			assertFalse(aUI.promptCommand());
 
 		}catch(Exception e){}
-		finally{System.setIn(System.in);}
 	}
 	
 	/**
@@ -93,13 +97,14 @@ public class UITest {
 	 * 		 INPUT:  		   Dummy
 	 * 		 EXPECTED OUTPUT:  Raised Exception NoSuchCommandExceptions
 	 */	
-	@Test(expected=NoSuchCommandExceptions.class)
-	public void testNoSuchCommandExceptions(){
-		ByteArrayInputStream in = new ByteArrayInputStream("Dummy".getBytes());
-		System.setIn(in);
+	public void testNoSuchCommandExceptions() throws NoSuchCommandExceptions{
 		in = new ByteArrayInputStream("Dummy".getBytes());
-		aUI.promptID();
-		System.setIn(System.in);
+		System.setIn(in);
+		try{
+			aUI.promptCommand();
+			fail("No Exceptions");
+		}catch(NoSuchCommandExceptions e){}
+		catch(Exception e){fail("Other exception");}
 	}
 	
 	/**
@@ -114,15 +119,15 @@ public class UITest {
 	 * 		 EXPECTED OUTPUT:  false
 	 */	
 	@Test
-	public void testPromptID() {
-		ByteArrayInputStream in = new ByteArrayInputStream("985002001 ".getBytes());
-		System.setIn(in);
+	public void testPromptID() throws NoSuchCommandExceptions{
+		in = new ByteArrayInputStream("985002001".getBytes());
 		try{
 			assertTrue(aUI.promptCommand());
 			in = new ByteArrayInputStream("Q".getBytes());
 			assertFalse(aUI.promptCommand());
-		}catch(Exception e){}
-		finally{System.setIn(System.in);}
+		}
+		catch(IOException e){}
+		catch(NullPointerException e){}
 	}
 	
 	/**
@@ -133,12 +138,15 @@ public class UITest {
 	 * 		 INPUT:  		   985002001
 	 * 		 EXPECTED OUTPUT:  Raised Exception NoSuchIDExceptions
 	 */	
-	@Test(expected=NoSuchIDExceptions.class)
+	
 	public void testNoSuchIDException(){
-		ByteArrayInputStream in = new ByteArrayInputStream("985002001".getBytes());
-		System.setIn(in);
-		aUI.promptID();
-		System.setIn(System.in);
+		in = new ByteArrayInputStream("555555".getBytes());
+		try{
+			aUI.promptID();
+			fail("No exception");
+		}
+		catch(NoSuchIDExceptions e){}
+		catch(Exception e5){fail("Other Exception");}
 	}
 		
 	
