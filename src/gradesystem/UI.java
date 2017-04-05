@@ -145,10 +145,10 @@ public class UI {
 			float[] newWeights = new float[5];
 			for (ExamsName e : ExamsName.values())
 				if (!e.toString().equals("totalGrade")) {
-					System.out.print(e.toString() + ": ");
+					System.out.print("\t" + e.toString() + ": ");
 					newWeights[e.getCode()] = (float) (Integer.parseInt(keyReader.readLine())) / 100;
 				}
-			System.out.println("Comfirm the new weights:");
+			System.out.println("Confirm the new weights:");
 			for (ExamsName e : ExamsName.values())
 				if (!e.toString().equals("totalGrade")) // totalGrade does't have weight
 					System.out.println("\t" + e.toString() + ": " + (int)(newWeights[e.getCode()]*100) + "%");

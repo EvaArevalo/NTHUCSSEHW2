@@ -40,7 +40,7 @@ public class UITest {
 	 * 		 EXPECTED OUTPUT:  false
 	 */	
 	@Test
-	public void testCheckID(int ID) {
+	public void testCheckID() {
 		assertTrue(aUI.checkID(985002001));
 		assertFalse(aUI.checkID(958500));
 	}
