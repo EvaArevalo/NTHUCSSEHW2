@@ -116,6 +116,7 @@ public class UI {
 		System.out.println("\t(W)eights Update");
 		System.out.println("\t(E)xit:");
 		String line = keyReader.readLine();
+		System.out.println("CMD:"+line);
 		switch (line) {
 		case "G": // show grades of the user
 			int[] scores = aGradeSystem.showGrade(userID);
@@ -180,6 +181,7 @@ public class UI {
 	public boolean promptID() throws NoSuchIDExceptions, IOException {
 		System.out.println("Enter your ID or 'Q' to quit:");
 		String line = keyReader.readLine();
+		System.out.println("ID:"+line);
 		if (line.equals("Q")) {
 			showFinishMsg();
 			return false;
